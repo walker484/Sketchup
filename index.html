@@ -3,670 +3,602 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📘 Guia Completo de Ferramentas - SketchUp</title>
+    <title>🖥️ SketchUp — Painel Completo de Ferramentas</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
+        body { background: #e0e0e0; height: 100vh; overflow: hidden; }
 
-        body {
-            background: linear-gradient(135deg, #f5f7fa, #e4e8ec);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        header {
-            background: linear-gradient(135deg, #2c5aa0, #1a3a6e);
+        .barra-topo {
+            background: linear-gradient(180deg, #444, #222);
             color: #fff;
-            padding: 30px;
-            text-align: center;
-        }
-
-        header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .navegacao {
-            background: #f0f4f8;
-            padding: 15px 30px;
-            border-bottom: 2px solid #e0e6ed;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navegacao h3 {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .nav-botoes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .nav-botoes a {
-            background: #fff;
-            border: 1px solid #2c5aa0;
-            color: #2c5aa0;
-            padding: 6px 12px;
-            border-radius: 20px;
-            text-decoration: none;
+            padding: 8px 15px;
             font-size: 13px;
+        }
+
+        .area-principal { display: flex; height: calc(100vh - 35px); }
+
+        /* 📌 PAINEL LATERAL */
+        .painel-lateral {
+            width: 80px;
+            background: #d0d0d0;
+            border-right: 1px solid #999;
+            padding: 10px 5px;
+            overflow-y: auto;
+        }
+
+        .categoria {
+            font-size: 10px;
+            color: #555;
+            font-weight: bold;
+            margin: 12px 0 4px 5px;
+            text-transform: uppercase;
+        }
+
+        .btn-ferramenta {
+            width: 62px;
+            height: 62px;
+            background: #fff;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            cursor: pointer;
             transition: all 0.2s;
         }
 
-        .nav-botoes a:hover {
-            background: #2c5aa0;
-            color: #fff;
-        }
+        .btn-ferramenta:hover { background: #e0edff; border-color: #2c5aa0; }
+        .btn-ferramenta.selecionada { background: #c8e0ff; border: 2px solid #2c5aa0; }
+        .btn-ferramenta span { font-size: 22px; }
+        .btn-ferramenta .nome { font-size: 8px; color: #444; margin-top: 2px; text-align: center; line-height: 1; }
 
-        main {
-            padding: 30px;
-        }
-
-        section {
-            margin-bottom: 50px;
-            scroll-margin-top: 90px;
-        }
-
-        section h2 {
-            font-size: 22px;
-            color: #2c5aa0;
-            border-bottom: 3px solid #2c5aa0;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-            background: #fff;
-            border-radius: 8px;
+        /* 📌 ÁREA DE TRABALHO */
+        .area-trabalho {
+            flex: 1;
+            background: #ffffff;
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
         }
 
-        th {
-            background: #2c5aa0;
-            color: #fff;
-            padding: 12px 10px;
-            text-align: left;
+        .grade {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(#e8e8e8 1px, transparent 1px),
+                linear-gradient(90deg, #e8e8e8 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.5;
+        }
+
+        .eixos {
+            position: absolute;
+            top: 30px; left: 30px;
             font-size: 14px;
+            font-weight: bold;
+        }
+        .eixo-v { color: #d82020; }
+        .eixo-a { color: #20a020; }
+        .eixo-z { color: #2060d0; }
+
+        .conteudo-cenario {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            width: 90%;
+            max-width: 700px;
         }
 
-        td {
-            padding: 12px 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
-            vertical-align: top;
+        .desenho-cenario {
+            font-size: 26px;
+            line-height: 1.8;
+            color: #222;
+            background: #f0f4f9;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #c8d5e8;
+            margin-bottom: 25px;
+            white-space: pre;
         }
 
-        tr:nth-child(even) td {
-            background: #f8fafb;
-        }
-
-        tr:hover td {
-            background: #f0f6ff;
-        }
-
-        .projeto {
-            background: #f0f9ff;
-            border-left: 4px solid #009688;
+        .caixa-explicacao {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             padding: 20px;
-            border-radius: 6px;
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .titulo-ferramenta {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c5aa0;
             margin-bottom: 15px;
         }
 
-        .projeto h3 {
-            color: #00695c;
-            font-size: 17px;
-            margin-bottom: 10px;
+        .bloco-info { margin-bottom: 12px; }
+        .bloco-info h4 { font-size: 14px; margin-bottom: 4px; }
+        .bloco-info p { font-size: 15px; color: #444; line-height: 1.5; }
+
+        .mouse {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
-
-        .projeto ol {
-            margin-left: 20px;
+        .mouse-acao {
+            background: #f8f8f8;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            border-left: 3px solid #888;
         }
-
-        .projeto li {
-            margin-bottom: 6px;
-        }
-
-        .dicas {
-            background: #fff9e6;
-            border-left: 4px solid #ff9800;
-            padding: 20px;
-            border-radius: 6px;
-        }
-
-        .dicas h3 {
-            color: #e65100;
-            margin-bottom: 12px;
-        }
-
-        .dicas ul {
-            margin-left: 20px;
-        }
-
-        .dicas li {
-            margin-bottom: 8px;
-        }
-
-        .importante {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-
-        .importante strong {
-            color: #2e7d32;
-        }
-
-        footer {
-            background: #f0f4f8;
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            color: #666;
-            border-top: 1px solid #ddd;
-        }
-
-        @media (max-width: 768px) {
-            main, header, .navegacao {
-                padding: 15px;
-            }
-
-            th, td {
-                padding: 8px 6px;
-                font-size: 12px;
-            }
+        .inicial {
+            color: #888;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>📘 Guia Completo de Ferramentas — SketchUp</h1>
-        <p>Seu manual completo para aprender e consultar sempre que precisar</p>
-    </header>
+    <div class="barra-topo">SketchUp — Conhecendo as Ferramentas</div>
 
-    <div class="navegacao">
-        <h3>📂 Navegação Rápida</h3>
-        <div class="nav-botoes">
-            <a href="#desenho">Desenho Básico</a>
-            <a href="#volume">Volume 3D</a>
-            <a href="#transformar">Transformar</a>
-            <a href="#navegar">Navegação</a>
-            <a href="#medir">Medir</a>
-            <a href="#estilo">Estilo</a>
-            <a href="#organizar">Organizar</a>
-            <a href="#compartilhar">Compartilhar</a>
-            <a href="#projetos">Projetos</a>
-            <a href="#dicas">Dicas</a>
+    <div class="area-principal">
+        <!-- 📌 PAINEL LATERAL COM TODAS AS FERRAMENTAS -->
+        <div class="painel-lateral">
+            <div class="categoria">SELEÇÃO</div>
+            <div class="btn-ferramenta selecionada" onclick="mostrar('selecionar')"><span>👆</span><div class="nome">Selecionar</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('informacao')"><span>ℹ️</span><div class="nome">Info</div></div>
+
+            <div class="categoria">DESENHO</div>
+            <div class="btn-ferramenta" onclick="mostrar('lapis')"><span>✏️</span><div class="nome">Lápis</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('retangulo')"><span>🟦</span><div class="nome">Retângulo</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('circulo')"><span>⭕</span><div class="nome">Círculo</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('poligono')"><span>⬡</span><div class="nome">Polígono</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('arco')"><span>⌒</span><div class="nome">Arco</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('mao-livre')"><span>✍️</span><div class="nome">Mão Livre</div></div>
+
+            <div class="categoria">VOLUME 3D</div>
+            <div class="btn-ferramenta" onclick="mostrar('empurrar')"><span>🧱</span><div class="nome">Empurrar</div></div>
+
+            <div class="categoria">TRANSFORMAR</div>
+            <div class="btn-ferramenta" onclick="mostrar('mover')"><span>↔️</span><div class="nome">Mover</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('rotacionar')"><span>🔄</span><div class="nome">Rotacionar</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('escala')"><span>📐</span><div class="nome">Escala</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('espelhar')"><span>🪞</span><div class="nome">Espelhar</div></div>
+
+            <div class="categoria">VISÃO</div>
+            <div class="btn-ferramenta" onclick="mostrar('orbita')"><span>🔃</span><div class="nome">Órbita</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('pan')"><span>➡️</span><div class="nome">Panorâmica</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('zoom')"><span>🔍</span><div class="nome">Zoom</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('zoom-janel')"><span>🖼️</span><div class="nome">Zoom Janela</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('previar')"><span>👁️</span><div class="nome">Previar</div></div>
+
+            <div class="categoria">MEDIR</div>
+            <div class="btn-ferramenta" onclick="mostrar('fita')"><span>📏</span><div class="nome">Fita</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('medir')"><span>📐</span><div class="nome">Medir</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('angulo')"><span>📐</span><div class="nome">Ângulo</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('eixo')"><span>⚡</span><div class="nome">Eixo</div></div>
+
+            <div class="categoria">CONSTRUÇÃO</div>
+            <div class="btn-ferramenta" onclick="mostrar('apagar')"><span>🗑️</span><div class="nome">Apagar</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('dividir')"><span>✂️</span><div class="nome">Dividir</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('intersecao')"><span>⋂</span><div class="nome">Interseção</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('cortar')"><span>🔪</span><div class="nome">Cortar Seção</div></div>
+
+            <div class="categoria">ESTILO</div>
+            <div class="btn-ferramenta" onclick="mostrar('pintar')"><span>🎨</span><div class="nome">Pintar</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('amostra')"><span>🖌️</span><div class="nome">Amostrador</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('texto')"><span>📝</span><div class="nome">Texto</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('dimensao')"><span>📏</span><div class="nome">Dimensão</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('angulo-dim')"><span>📐</span><div class="nome">Ângulo</div></div>
+
+            <div class="categoria">ORGANIZAR</div>
+            <div class="btn-ferramenta" onclick="mostrar('grupo')"><span>📁</span><div class="nome">Grupo</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('componente')"><span>🔁</span><div class="nome">Componente</div></div>
+            <div class="btn-ferramenta" onclick="mostrar('ocultar')"><span>🙈</span><div class="nome">Ocultar</div></div>
+        </div>
+
+        <!-- 📌 ÁREA DE TRABALHO ONDE APARECE O QUE A FERRAMENTA FAZ -->
+        <div class="area-trabalho" id="areaTrabalho">
+            <div class="grade"></div>
+            <div class="eixos">
+                <span class="eixo-v">Eixo Vermelho →</span><br>
+                <span class="eixo-a">Eixo Verde ↘</span><br>
+                <span class="eixo-z">Eixo Azul ↑ Altura</span>
+            </div>
+
+            <div class="conteudo-cenario" id="conteudoCenario">
+                <div class="inicial">👈 Clique em uma ferramenta ao lado para começar!</div>
+            </div>
         </div>
     </div>
 
-    <main>
-        <div class="importante">
-            <strong>💡 Como usar este guia:</strong> Leia uma seção por dia, pratique no SketchUp, e volte sempre que tiver dúvida. Não precisa decorar tudo — basta saber onde encontrar!
+<script>
+const dados = {
+    selecionar: {
+        nome: '👆 SELECIONAR',
+        desenho: '  Clica no objeto → ele fica marcado\n  Pode arrastar para mudar de lugar\n  Segure Ctrl → seleciona vários de uma vez',
+        para: 'Escolher qual objeto você quer modificar, mover ou apagar.',
+        mouse: [
+            '🖱️ Clique simples = seleciona 1 item',
+            '🖱️ Ctrl + clique = adiciona mais itens',
+            '🖱️ Arraste com botão esquerdo = seleciona vários de uma vez'
+        ]
+    },
+    lapis: {
+        nome: '✏️ LÁPIS',
+        desenho: '  🟢 Ponto inicial ────────────────→ 🟢 Ponto final\n  Clica 1ª vez → move → clica 2ª vez',
+        para: 'Desenha linhas retas que formam as bordas de tudo: paredes, pisos, janelas.',
+        mouse: [
+            '🖱️ Clique uma vez = começa a linha',
+            '🖱️ Mova o mouse = a linha acompanha',
+            '🖱️ Clique novamente = termina a linha',
+            '⌨️ Digite o número + Enter = medida exata'
+        ]
+    },
+    retangulo: {
+        nome: '🟦 RETÂNGULO',
+        desenho: '  🟢 Canto 1 ╭─────────────╮\n              │             │\n              │   3,50m     │\n              ╰─────────────╯ 🟢 Canto 2',
+        para: 'Desenha os 4 lados de uma vez! Perfeito para fazer o piso dos cômodos.',
+        mouse: [
+            '🖱️ Clique no 1º canto',
+            '🖱️ Arraste na diagonal sem soltar',
+            '🖱️ Solte no canto oposto = pronto!',
+            '⌨️ Digite: 3,50m,4,00m + Enter = tamanho certo!'
+        ]
+    },
+    circulo: {
+        nome: '⭕ CÍRCULO',
+        desenho: '      🟢 Centro\n         │\n         ├───┤  raio\n         │   │\n        ╭──────╮\n        │      │\n        ╰──────╯',
+        para: 'Desenha formas redondas: colunas, pias, janelas circulares, piscinas.',
+        mouse: [
+            '🖱️ Clique no centro do círculo',
+            '🖱️ Arraste para fora = aumenta o tamanho',
+            '🖱️ Clique para fixar',
+            '⌨️ Digite o valor do raio + Enter'
+        ]
+    },
+    poligono: {
+        nome: '⬡ POLÍGONO',
+        desenho: '         🟢 Centro\n            │\n       ╭───┬───╮\n       │       │\n       │   6   │ ← 6 lados\n       │       │\n       ╰───────╯',
+        para: 'Desenha figuras com vários lados: pilares sextavados, torres, pisos especiais.',
+        mouse: [
+            '⌨️ Digite o número de lados + Enter primeiro',
+            '🖱️ Clique no centro',
+            '🖱️ Arraste para fora = define o tamanho',
+            '🖱️ Clique para terminar'
+        ]
+    },
+    arco: {
+        nome: '⌒ ARCO',
+        desenho: '       🟢           🟢\n    Início ─────── Fim\n             ╲     /\n              ╲   /\n               ╲╱ ← curva que você puxa',
+        para: 'Desenha cantos arredondados, portas curvas, janelas em arco.',
+        mouse: [
+            '🖱️ Clique no ponto inicial',
+            '🖱️ Clique no ponto final',
+            '🖱️ Arraste para fora = define a altura da curva',
+            '🖱️ Clique quando achar bom!'
+        ]
+    },
+    'mao-livre': {
+        nome: '✍️ MÃO LIVRE',
+        desenho: '        ╭─────────────╮\n       ╱               ╲\n      ╱                 ╲ ← desenha solto\n     ╰───────────────────╯',
+        para: 'Desenha linhas curvas à mão livre, sem precisar ser reto. Para esboços rápidos.',
+        mouse: [
+            '🖱️ Segure o botão esquerdo pressionado',
+            '🖱️ Desenhe solto com o mouse',
+            '🖱️ Solte o botão = termina o desenho'
+        ]
+    },
+    empurrar: {
+        nome: '🧱 EMPURRAR / PUXAR',
+        desenho: '          ↑ 2,80m\n          │\n      ╭───────╮      ╭───────╮\n      │ chão  │ ──→ │ parede │\n      ╰───────╯      ╰───────╯',
+        para: 'A ferramenta mais importante! Transforma um piso plano em parede com altura.',
+        mouse: [
+            '🖱️ Clique em cima da superfície cinza',
+            '🖱️ Arraste para CIMA = sobe a parede',
+            '🖱️ Arraste para BAIXO = abaixa ou faz buraco',
+            '⌨️ Digite a medida + Enter = altura exata!'
+        ]
+    },
+    mover: {
+        nome: '↔️ MOVER',
+        desenho: '    ╭──────╮        ╭──────╮\n    │  A   │ ─────→ │  B   │\n    ╰──────╯        ╰──────╯\n    Pega → leva → solta no lugar',
+        para: 'Troca objetos de lugar sem ter que desenhar de novo.',
+        mouse: [
+            '🖱️ Clique no objeto que quer mover',
+            '🖱️ Clique em um ponto de referência',
+            '🖱️ Mova para o lugar novo',
+            '🖱️ Clique para soltar',
+            '⌨️ Segure Ctrl enquanto solta = FAZ CÓPIA!'
+        ]
+    },
+    rotacionar: {
+        nome: '🔄 ROTACIONAR',
+        desenho: '   ╭──────╮         ╭──────╮\n   │      │   45°   │      │\n   │      │ ─────→ │      │\n   ╰──────╯         ╰──────╯',
+        para: 'Gira um objeto virando para a direção que você precisa.',
+        mouse: [
+            '🖱️ Clique no ponto onde ele vai girar ao redor',
+            '🖱️ Clique em um ponto de referência',
+            '🖱️ Mova o mouse = ele gira junto',
+            '🖱️ Clique no ângulo certo = fixa',
+            '⌨️ Digite o grau + Enter = exato!'
+        ]
+    },
+    escala: {
+        nome: '📐 ESCALA',
+        desenho: '   ╭───────╮      ╭──────────────╮\n   │ pequeno│ ──→ │     grande    │\n   ╰───────╯      ╰──────────────╯',
+        para: 'Aumenta ou diminui o tamanho de um objeto, mantendo as proporções.',
+        mouse: [
+            '🖱️ Clique no objeto',
+            '🖱️ Puxe um canto = aumenta/diminui',
+            '🖱️ Clique no meio de uma borda = só mexe daquele lado',
+            '⌨️ Digite um número: 0.5 = metade do tamanho, 2x = dobro'
+        ]
+    },
+    espelhar: {
+        nome: '🪞 ESPELHAR',
+        desenho: '   ╭──────╮ │ ╭──────╮\n   │  A   │ │ │  B   │ ← igual mas virado\n   ╰──────╯ │ ╰──────╯',
+        para: 'Cria uma cópia virada, como se estivesse diante de um espelho.',
+        mouse: [
+            '🖱️ Selecione o objeto',
+            '🖱️ Ative a ferramenta Espelhar',
+            '🖱️ Defina a linha onde será o espelho',
+            '🖱️ Pronto! Aparece a cópia virada'
+        ]
+    },
+    orbita: {
+        nome: '🔃 ÓRBITA',
+        desenho: '        ↖️   🖱️   ↗️\n          \\   /\n           \\ /\n         ╭──────╮\n         │casa  │ ← você gira ao redor\n         ╰──────╯',
+        para: 'Gira a câmera para você ver seu projeto de qualquer lado — sem mover a casa!',
+        mouse: [
+            '🖱️ Segure a RODA do mouse + mexa = GIRA!',
+            '❌ Não precisa clicar em nenhum botão!',
+            '💡 É a ferramenta que você mais vai usar!'
+        ]
+    },
+    pan: {
+        nome: '➡️ PANORÂMICA',
+        desenho: '   ╭──────╮          ╭──────╮\n   │casa  │ ─────→   │casa  │ ← desloca\n   ╰──────╯          ╰──────╯',
+        para: 'Desloca a tela para ver outras partes sem girar.',
+        mouse: [
+            '🖱️ Segure a RODA + Shift + mexa = DESLOCA!',
+            '💡 Útil quando algo saiu da tela'
+        ]
+    },
+    zoom: {
+        nome: '🔍 ZOOM',
+        desenho: '        🔍 aproxima\n   ╭──────────────╮\n   │   detalhe    │ ← perto\n   ╰──────────────╯',
+        para: 'Aproxima para ver detalhes ou afasta para ver o projeto inteiro.',
+        mouse: [
+            '🖱️ Roda do mouse PARA CIMA = aproxima',
+            '🖱️ Roda do mouse PARA BAIXO = afasta',
+            '🖱️ Clique duplo na roda = volta a ver tudo!'
+        ]
+    },
+    'zoom-janel': {
+        nome: '🖼️ ZOOM JANELA',
+        desenho: '   🟢╭─────────────╮🟢\n     │   selecione  │\n     ╰─────────────╯\n   Clica e arrasta = só essa área aparece grande',
+        para: 'Amplia exatamente uma área que você escolhe com o mouse.',
+        mouse: [
+            '🖱️ Clique e segure em um canto',
+            '🖱️ Arraste formando um retângulo sobre a área que quer ver de perto',
+            '🖱️ Solte = a área preenche a tela!'
+        ]
+    },
+    previar: {
+        nome: '👁️ PREVIAR',
+        desenho: '      👁️\n       │\n   ╭───┴──────╮\n   │  vista   │ ← anda ao redor livremente\n   ╰──────────╯',
+        para: 'Navegação livre como se você estivesse andando dentro do projeto.',
+        mouse: [
+            '🖱️ Clique e segure botão esquerdo',
+            '🖱️ Arraste para olhar ao redor',
+            '💡 Mais usado para apresentações, não para desenhar'
+        ]
+    },
+    fita: {
+        nome: '📏 FITA MÉTRICA',
+        desenho: '   🟢 Início ──────────── 3,50m ──────────── 🟢 Fim',
+        para: 'Mede distâncias e cria linhas de guia para posicionar coisas com precisão.',
+        mouse: [
+            '📏 MEDIR: Clique no início → clique no fim → aparece a medida',
+            '📍 CRIAR GUIA: Clique em uma borda → arraste → digite a distância + Enter = linha de referência'
+        ]
+    },
+    medir: {
+        nome: '📐 MEDIR DISTÂNCIA',
+        desenho: '   ┌─────────────────────┐\n   │   4,25m             │\n   └─────────────────────┘',
+        para: 'Mostra a distância entre dois pontos diretamente na tela.',
+        mouse: [
+            '🖱️ Clique no 1º ponto',
+            '🖱️ Clique no 2º ponto',
+            '📝 O valor aparece na tela automaticamente'
+        ]
+    },
+    angulo: {
+        nome: '📐 MEDIR ÂNGULO',
+        desenho: '         ╱│\n        ╱ │\n       ╱  │ 60° ← mostra o ângulo\n      ╱___│',
+        para: 'Mede quanto está inclinada uma linha ou superfície.',
+        mouse: [
+            '🖱️ Clique no vértice (onde as linhas se encontram)',
+            '🖱️ Clique na primeira linha',
+            '🖱️ Clique na segunda linha',
+            '📝 O ângulo aparece na tela'
+        ]
+    },
+    eixo: {
+        nome: '⚡ EIXO',
+        desenho: '   ───────► Vermelho\n   ↘        Verde\n   ↑ Azul (altura)',
+        para: 'Mostra ou esconde as linhas de referência que guiam sua direção no desenho.',
+        mouse: [
+            '🖱️ Clique uma vez = MOSTRA os eixos',
+            '🖱️ Clique de novo = ESCONDE os eixos',
+            '💡 Útil quando estão atrapalhando a visualização'
+        ]
+    },
+    apagar: {
+        nome: '🗑️ APAGAR',
+        desenho: '   ────────────────  ✕  apagado!',
+        para: 'Remove linhas, superfícies e objetos que você não precisa mais.',
+        mouse: [
+            '🖱️ Clique em cima do que quer apagar = some na hora!',
+            '🖱️ Arraste passando por cima de vários = apaga tudo de uma vez',
+            '↩️ Ctrl + Z = desfaz se apagar por engano!'
+        ]
+    },
+    dividir: {
+        nome: '✂️ DIVIDIR',
+        desenho: '   ────────────  →  ───────┼───────',
+        para: 'Corta uma linha em dois pontos separados no mesmo lugar.',
+        mouse: [
+            '🖱️ Posicione o mouse em cima da linha onde quer cortar',
+            '🖱️ Clique = a linha vira duas linhas separadas'
+        ]
+    },
+    intersecao: {
+        nome: '⋂ INTERSEÇÃO',
+        desenho: '   ╭───────╮          ╭───────╮\n   │   A   │          │   B   │\n   │ ╭─────┼──→ fica  │ ╭─────╮│\n   ╰─┼─────╯          ╰─┼─────╯\n     ╰─────╯ só onde se tocam',
+        para: 'Mantém apenas a parte onde os objetos se sobrepõem.',
+        mouse: [
+            '🖱️ Selecione os dois objetos',
+            '🖱️ Clique na ferramenta = só fica a área comum'
+        ]
+    },
+    cortar: {
+        nome: '🔪 CORTAR SEÇÃO',
+        desenho: '   ╭──────────────╮\n   │              │\n   │   ───────────← plano de corte\n   │              │\n   ╰──────────────╯',
+        para: 'Corta a casa ao meio para você ver o interior sem precisar tirar o telhado.',
+        mouse: [
+            '🖱️ Clique = aparece um plano',
+            '🖱️ Arraste o plano para onde quer cortar',
+            '👀 Você vê dentro da casa!',
+            '🖱️ Clique de novo = esconde o corte'
+        ]
+    },
+    pintar: {
+        nome: '🎨 PINTAR',
+        desenho: '   ╭──────╮      ╭══════════╮\n   │ cinza │ ──→ │ madeira  │\n   ╰──────╯      ╰══════════╯',
+        para: 'Coloca cores, pisos, pedras e texturas nas superfícies.',
+        mouse: [
+            '🖱️ Escolha um material na janela que abre',
+            '🖱️ Clique na superfície que quer mudar = pronto!',
+            '🖱️ Clique em várias superfícies seguidas para aplicar o mesmo material'
+        ]
+    },
+    amostra: {
+        nome: '🖌️ AMOSTRADOR',
+        desenho: '   🖌️ pega daqui → aplica ali',
+        para: 'Pega a cor/material de um objeto que já existe e usa em outro.',
+        mouse: [
+            '⌨️ Segure a tecla Alt',
+            '🖱️ Clique no objeto que tem a cor que você quer',
+            '🖱️ Solte Alt e clique no objeto que quer pintar'
+        ]
+    },
+    texto: {
+        nome: '📝 TEXTO',
+        desenho: '   📝 Quarto de Casal',
+        para: 'Coloca nomes, observações e informações dentro do projeto.',
+        mouse: [
+            '🖱️ Clique onde quer que comece o texto',
+            '🖱️ Digite o que quiser',
+            '🖱️ Clique fora = termina'
+        ]
+    },
+    dimensao: {
+        nome: '📏 DIMENSÃO',
+        desenho: '   ┌───────────┐\n   │   3,50 m  │ ← aparece automaticamente\n   └───────────┘',
+        para: 'Coloca as medidas do desenho de forma organizada, igual em planta baixa.',
+        mouse: [
+            '🖱️ Clique no 1º ponto da distância',
+            '🖱️ Clique no 2º ponto',
+            '🖱️ Arraste para fora da linha = posiciona o número',
+            '🖱️ Solte = a medida aparece'
+        ]
+    },
+    'angulo-dim': {
+        nome: '📐 ANOTAÇÃO DE ÂNGULO',
+        desenho: '        ╱\n       ╱ 60°\n      ╱____',
+        para: 'Mostra o valor do ângulo entre duas linhas de forma permanente.',
+        mouse: [
+            '🖱️ Clique nas duas linhas que formam o ângulo',
+            '🖱️ Arraste para posicionar o número',
+            '🖱️ Clique para fixar'
+        ]
+    },
+    grupo: {
+        nome: '📁 GRUPO',
+        desenho: '   ╭─────────────────────╮\n   │  ╭───╮  ╭───╮       │\n   │  │parede│ │piso │   │ ← tudo junto = 1 bloco\n   │  ╰───╯  ╰───╯       │\n   ╰─────────────────────╯',
+        para: 'Junta várias peças em um bloco só para não bagunçar quando tocar em uma parte.',
+        mouse: [
+            '🖱️ Selecione tudo que quer juntar arrastando o mouse',
+            '🖱️ Botão direito do mouse → Criar Grupo',
+            '🖱️ Clica uma vez = seleciona tudo junto!',
+            '💡 Faça um grupo para cada cômodo diferente!'
+        ]
+    },
+    componente: {
+        nome: '🔁 COMPONENTE',
+        desenho: '   🪟  🪟  🪟  🪟\n   Mude UMA → TODAS mudam juntas! ✨',
+        para: 'Igual ao Grupo, mas com um superpoder: quando você altera uma, mudam todas as cópias automaticamente!',
+        mouse: [
+            '🖱️ Desenhe 1 janela/porta → selecione',
+            '🖱️ Botão direito → Criar Componente',
+            '🖱️ Copie quantas precisar',
+            '🖱️ Edite uma → TODAS atualizam juntas!'
+        ]
+    },
+    ocultar: {
+        nome: '🙈 OCULTAR',
+        desenho: '   ╭──────╮        (sumiu! mas continua lá)\n   │ telhado│ ───→\n   ╰──────╯',
+        para: 'Esconde objetos que estão atrapalhando sua visualização sem apagá-los de verdade.',
+        mouse: [
+            '🖱️ Selecione o objeto',
+            '🖱️ Botão direito → Ocultar',
+            '👀 Para trazer de volta: Menu Editar → Mostrar → Tudo'
+        ]
+    }
+};
+
+function mostrar(chave) {
+    // Remove seleção de todos
+    document.querySelectorAll('.btn-ferramenta').forEach(b => b.classList.remove('selecionada'));
+    // Adiciona no clicado
+    event.currentTarget.classList.add('selecionada');
+    
+    const d = dados[chave];
+    const area = document.getElementById('conteudoCenario');
+    
+    area.innerHTML = `
+        <div class="desenho-cenario">${d.desenho}</div>
+        <div class="caixa-explicacao">
+            <div class="titulo-ferramenta">${d.nome}</div>
+            
+            <div class="bloco-info">
+                <h4>🎯 Para que serve:</h4>
+                <p>${d.para}</p>
+            </div>
+            
+            <div class="bloco-info">
+                <h4>🖱️ Como usar o mouse:</h4>
+                <div class="mouse">
+                    ${d.mouse.map(m => `<div class="mouse-acao">${m}</div>`).join('')}
+                </div>
+            </div>
         </div>
-
-        <!-- ====================================== -->
-        <section id="desenho">
-            <h2>🟦 SEÇÃO 1 — DESENHO BÁSICO</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Lápis</strong></td>
-                    <td>✏️</td>
-                    <td>Desenha linhas retas e contornos</td>
-                    <td>Clique no ponto inicial → mova → clique no ponto final. Digite o valor + Enter para medida exata.</td>
-                    <td>Desenhar as paredes de um quarto, definir limites de um terreno</td>
-                </tr>
-                <tr>
-                    <td><strong>Retângulo</strong></td>
-                    <td>🟦</td>
-                    <td>Desenha quadrados e retângulos com cantos retos</td>
-                    <td>Clique em um canto → arraste → clique no canto oposto. Digite 3,50m,4,00m para tamanho exato.</td>
-                    <td>Fazer o piso de uma sala, base de uma casa, formato de um terreno</td>
-                </tr>
-                <tr>
-                    <td><strong>Retângulo Centrado</strong></td>
-                    <td>🟦+</td>
-                    <td>Desenha retângulo a partir do centro</td>
-                    <td>Clique no centro → arraste para fora → clique para confirmar</td>
-                    <td>Desenhar uma mesa, piso centralizado, aberturas simétricas</td>
-                </tr>
-                <tr>
-                    <td><strong>Círculo</strong></td>
-                    <td>⭕</td>
-                    <td>Desenha formas circulares e arredondadas</td>
-                    <td>Clique no centro → digite o raio → Enter. Mais lados = mais suave.</td>
-                    <td>Colunas, pilares, janelas redondas, formato de uma piscina</td>
-                </tr>
-                <tr>
-                    <td><strong>Polígono</strong></td>
-                    <td>⬡</td>
-                    <td>Desenha figuras com 3 a 100 lados</td>
-                    <td>Clique no centro → digite o número de lados → arraste → clique</td>
-                    <td>Pilares sextavados, formato de uma torre, piso em formato especial</td>
-                </tr>
-                <tr>
-                    <td><strong>Arco</strong></td>
-                    <td>⌒</td>
-                    <td>Desenha curvas e cantos arredondados</td>
-                    <td>Clique no ponto inicial → ponto final → arraste para definir a curvatura</td>
-                    <td>Cantos arredondados em uma parede, formato de um balcão, porta curva</td>
-                </tr>
-                <tr>
-                    <td><strong>Forma Mão Livre</strong></td>
-                    <td>✍️</td>
-                    <td>Desenha linhas curvas à mão livre</td>
-                    <td>Clique e arraste desenhando solto → solte para finalizar</td>
-                    <td>Esboços rápidos, marcações, formas orgânicas</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="volume">
-            <h2>🧱 SEÇÃO 2 — VOLUME E FORMA 3D</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Empurrar/Puxar</strong></td>
-                    <td>🧱</td>
-                    <td>Transforma superfície plana em volume 3D</td>
-                    <td>Clique na superfície → arraste para cima/fora → clique para parar. Digite altura exata + Enter.</td>
-                    <td>Paredes: desenha o chão → puxa 2,80m → parede pronta! 🧱</td>
-                </tr>
-                <tr>
-                    <td><strong>União</strong></td>
-                    <td>🔗</td>
-                    <td>Junta dois sólidos em um só</td>
-                    <td>Selecione os dois objetos → clique na ferramenta → ficam um volume único</td>
-                    <td>Unir uma laje com uma parede, juntar dois cômodos</td>
-                </tr>
-                <tr>
-                    <td><strong>Subtração</strong></td>
-                    <td>➖</td>
-                    <td>Remove parte de um sólido usando outro</td>
-                    <td>Selecione o objeto principal → clique na ferramenta → clique no objeto a remover</td>
-                    <td>Fazer um buraco para janela, vão de porta, canaleta em parede</td>
-                </tr>
-                <tr>
-                    <td><strong>Interseção</strong></td>
-                    <td>⋂</td>
-                    <td>Mantém apenas onde os sólidos se sobrepõem</td>
-                    <td>Selecione os dois → clique na ferramenta → fica só a área comum</td>
-                    <td>Forma especial de encontro de vigas, corte personalizado</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="transformar">
-            <h2>🔄 SEÇÃO 3 — TRANSFORMAR E MOVER</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Mover</strong></td>
-                    <td>↔️</td>
-                    <td>Move objetos de lugar</td>
-                    <td>Clique no objeto → clique no ponto de referência → mova → clique no destino</td>
-                    <td>Colocar uma janela na posição certa, mover um cômodo inteiro</td>
-                </tr>
-                <tr>
-                    <td><strong>Copiar</strong></td>
-                    <td>📋</td>
-                    <td>Faz cópias de objetos</td>
-                    <td>Segure Ctrl antes de soltar → copia. Digite o número + Enter → repete a distância</td>
-                    <td>Colocar 5 janelas iguais em uma parede, postes ao longo de muro</td>
-                </tr>
-                <tr>
-                    <td><strong>Rotacionar</strong></td>
-                    <td>🔄</td>
-                    <td>Gira objetos em qualquer ângulo</td>
-                    <td>Defina o centro de rotação → clique em um ponto → gire → digite o ângulo + Enter</td>
-                    <td>Girar uma porta aberta, posicionar um telhado inclinado</td>
-                </tr>
-                <tr>
-                    <td><strong>Escala</strong></td>
-                    <td>📐</td>
-                    <td>Aumenta ou diminui o tamanho</td>
-                    <td>Clique no objeto → puxe um canto → digite a proporção + Enter</td>
-                    <td>Redimensionar uma planta, ajustar tamanho de móvel</td>
-                </tr>
-                <tr>
-                    <td><strong>Espelhar</strong></td>
-                    <td>🪞</td>
-                    <td>Cria imagem espelhada do objeto</td>
-                    <td>Selecione → ferramenta → defina o eixo de espelhamento</td>
-                    <td>Simetria de uma casa, lado esquerdo igual ao direito</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="navegar">
-            <h2>👁️ SEÇÃO 4 — NAVEGAÇÃO E VISÃO</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Órbita</strong></td>
-                    <td>🔃</td>
-                    <td>Gira a câmera ao redor do projeto</td>
-                    <td>Clique e arraste → gira livremente em 360°</td>
-                    <td>Ver a casa de todos os lados, conferir se paredes estão corretas</td>
-                </tr>
-                <tr>
-                    <td><strong>Panorâmica</strong></td>
-                    <td>➡️</td>
-                    <td>Desloca a tela sem girar</td>
-                    <td>Clique e arraste → move a visão para qualquer direção</td>
-                    <td>Ver uma parte que está fora da tela sem mudar o ângulo</td>
-                </tr>
-                <tr>
-                    <td><strong>Zoom</strong></td>
-                    <td>🔍</td>
-                    <td>Aproxima e afasta a visualização</td>
-                    <td>Clique e arraste para cima = aproxima; para baixo = afasta</td>
-                    <td>Detalhar um canto da parede, ver o projeto inteiro de longe</td>
-                </tr>
-                <tr>
-                    <td><strong>Vista de Cima</strong></td>
-                    <td>🔽</td>
-                    <td>Olha direto de cima, perpendicular</td>
-                    <td>Clique → vista plana, como planta baixa</td>
-                    <td>Desenhar a planta no plano 2D sem distorção</td>
-                </tr>
-                <tr>
-                    <td><strong>Cortar Seção</strong></td>
-                    <td>🔪</td>
-                    <td>Corta a casa para ver dentro</td>
-                    <td>Ative → aparece um plano → mova → vê o interior</td>
-                    <td>Ver distribuição interna sem teto/parede externa</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="medir">
-            <h2>📏 SEÇÃO 5 — MEDIR E GUIAR</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Fita Métrica</strong></td>
-                    <td>📏</td>
-                    <td>Mede distâncias e cria linhas de guia</td>
-                    <td>Clique no ponto inicial → ponto final → mostra a medida. Arraste sem soltar = cria linha guia.</td>
-                    <td>Verificar se o quarto tem 3,50m, alinhar janelas iguais</td>
-                </tr>
-                <tr>
-                    <td><strong>Guia Paralela</strong></td>
-                    <td>➕</td>
-                    <td>Cria linhas de referência paralelas</td>
-                    <td>Clique em uma aresta → arraste → digite a distância → Enter</td>
-                    <td>Marcar onde vai ficar a janela a 1,50m da borda</td>
-                </tr>
-                <tr>
-                    <td><strong>Medir Ângulo</strong></td>
-                    <td>📐</td>
-                    <td>Mede graus entre duas linhas</td>
-                    <td>Clique no vértice → primeira linha → segunda linha → mostra o ângulo</td>
-                    <td>Verificar inclinação do telhado, confirmação de esquadria</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="estilo">
-            <h2>🎨 SEÇÃO 6 — ESTILO E APARENCIA</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Pintar</strong></td>
-                    <td>🎨</td>
-                    <td>Aplica cores e materiais</td>
-                    <td>Escolha na paleta → clique na superfície → aplica imediatamente</td>
-                    <td>Piso cerâmico na sala, tinta nas paredes, telha no telhado</td>
-                </tr>
-                <tr>
-                    <td><strong>Amostrador</strong></td>
-                    <td>🖌️</td>
-                    <td>Pega cor/material de outro objeto</td>
-                    <td>Segure Alt e clique → pega o material → aplique em outro lugar</td>
-                    <td>Igualar a cor de duas paredes diferentes</td>
-                </tr>
-                <tr>
-                    <td><strong>Sombras</strong></td>
-                    <td>🌑</td>
-                    <td>Liga e desliga sombras</td>
-                    <td>Clique → sombra aparece/desaparece</td>
-                    <td>Mostrar como o sol entra nos ambientes</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="organizar">
-            <h2>📦 SEÇÃO 7 — ORGANIZAR E GERENCIAR</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Selecionar</strong></td>
-                    <td>🖱️</td>
-                    <td>Escolhe o que você vai trabalhar</td>
-                    <td>Clique = 1 item; Ctrl+clique = adiciona; Ctrl+A = tudo</td>
-                    <td>Selecionar só as paredes para pintar de uma vez</td>
-                </tr>
-                <tr>
-                    <td><strong>Apagar</strong></td>
-                    <td>🗑️</td>
-                    <td>Remove linhas e objetos</td>
-                    <td>Clique no item → apaga. Arraste por cima = apaga vários rápido</td>
-                    <td>Apagar linha guia que não precisa mais, corrigir erro</td>
-                </tr>
-                <tr>
-                    <td><strong>Grupo</strong></td>
-                    <td>📁</td>
-                    <td>Junta objetos em um bloco único</td>
-                    <td>Selecione tudo → clique → vira um grupo com contorno azul</td>
-                    <td>Paredes + piso + teto = grupo "Quarto 1"</td>
-                </tr>
-                <tr>
-                    <td><strong>Componente</strong></td>
-                    <td>🔁</td>
-                    <td>Quando muda um, muda todas as cópias</td>
-                    <td>Crie o componente → copie. Altere um → todos mudam!</td>
-                    <td>Janela: mude uma → todas 15 janelas mudam juntas! 🪟</td>
-                </tr>
-                <tr>
-                    <td><strong>Ocultar</strong></td>
-                    <td>🙈</td>
-                    <td>Esconde objetos sem apagá-los</td>
-                    <td>Selecione → botão direito → Ocultar</td>
-                    <td>Esconde o telhado para trabalhar no interior da casa</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="compartilhar">
-            <h2>📤 SEÇÃO 8 — COMPARTILHAR E EXPORTAR</h2>
-            <table>
-                <tr>
-                    <th>Nome</th>
-                    <th>Ícone</th>
-                    <th>Para que serve</th>
-                    <th>Como usar</th>
-                    <th>Exemplo de Projeto</th>
-                </tr>
-                <tr>
-                    <td><strong>Salvar</strong></td>
-                    <td>💾</td>
-                    <td>Grava seu arquivo (.skp)</td>
-                    <td>Arquivo → Salvar → escolha pasta → nome → Salvar</td>
-                    <td>Salve a cada 15 minutos! Evita perder trabalho!</td>
-                </tr>
-                <tr>
-                    <td><strong>Exportar Imagem</strong></td>
-                    <td>🖼️</td>
-                    <td>Salva a vista como foto (.jpg, .png)</td>
-                    <td>Arquivo → Exportar → Imagem → escolha resolução → Salvar</td>
-                    <td>Enviar para cliente: "Olha como vai ficar sua casa!" 📧</td>
-                </tr>
-                <tr>
-                    <td><strong>3D Warehouse</strong></td>
-                    <td>🏬</td>
-                    <td>Biblioteca gratuita de milhões de objetos</td>
-                    <td>Botão: 3D Warehouse → pesquise → baixe → use!</td>
-                    <td>"Sofá", "Porta", "Cozinha" — alguém já desenhou! Economiza horas!</td>
-                </tr>
-            </table>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="projetos">
-            <h2>🏗️ SEÇÃO 9 — EXEMPLOS DE PROJETOS PASSO A PASSO</h2>
-
-            <div class="projeto">
-                <h3>📌 PROJETO 1 — Um Cômodo Simples</h3>
-                <p><strong>Ferramentas usadas:</strong> Retângulo → Empurrar/Puxar → Fita Métrica → Pintar</p>
-                <ol>
-                    <li>Desenhe um retângulo: digite <code>3,50m,4,00m</code> + Enter</li>
-                    <li>Clique em <strong>Empurrar/Puxar</strong> → puxe para cima → digite <code>2,80m</code> → Enter</li>
-                    <li>Use a <strong>Fita Métrica</strong> para conferir as medidas</li>
-                    <li><strong>Pinte:</strong> piso = cerâmica; paredes = branco; teto = branco sujo</li>
-                </ol>
-                <p>✅ <strong>Resultado:</strong> Quarto pronto em menos de 5 minutos! 🎉</p>
-            </div>
-
-            <div class="projeto">
-                <h3>📌 PROJETO 2 — Casa Completa</h3>
-                <p><strong>Ferramentas usadas:</strong> Linha → Retângulo → Empurrar/Puxar → Grupo → Componente → Cortar Seção</p>
-                <ol>
-                    <li>Desenhe a planta baixa com todos os cômodos usando linhas</li>
-                    <li>Use retângulos para definir cada ambiente</li>
-                    <li>Empurre/puxe todas as paredes para 2,80m de altura</li>
-                    <li>Transforme cada cômodo em <strong>Grupo</strong> para não confundir</li>
-                    <li>Insira portas e janelas da biblioteca de Componentes</li>
-                    <li>Ative <strong>Cortar Seção</strong> para ver o interior</li>
-                </ol>
-                <p>✅ <strong>Resultado:</strong> Casa completa com planta + 3D + visão interna! 🏠</p>
-            </div>
-
-            <div class="projeto">
-                <h3>📌 PROJETO 3 — Detalhe de Fachada</h3>
-                <p><strong>Ferramentas usadas:</strong> Câmera Padrão → Salvar Vista → Sombras → Pintar → Exportar Imagem</p>
-                <ol>
-                    <li>Posicione a câmera de frente para a entrada</li>
-                    <li>Ajuste a hora do sol para ver como a sombra cai na parede</li>
-                    <li>Aplique os materiais: telha, tinta, porta, janelas</li>
-                    <li>Salve a vista como "Fachada Principal"</li>
-                    <li>Exporte em alta resolução para enviar ao cliente</li>
-                </ol>
-                <p>✅ <strong>Resultado:</strong> Imagem profissional pronta para apresentação! 📷</p>
-            </div>
-        </section>
-
-        <!-- ====================================== -->
-        <section id="dicas">
-            <h2>💡 DICAS EXTRAS IMPORTANTES</h2>
-            <div class="dicas">
-                <h3>Guia de Sobrevivência no SketchUp</h3>
-                <ul>
-                    <li><strong>💾 Salve sempre em .skp</strong> — É o formato nativo, nunca perde qualidade</li>
-                    <li><strong>📦 Use grupos e componentes</strong> — Seu projeto não vira uma bagunça impossível de editar depois</li>
-                    <li><strong>🌱 Comece simples</strong> — Não tente fazer uma mansão no dia 1. Comece por um quarto, depois cresça</li>
-                    <li><strong>🖱️ Aprenda o mouse primeiro</strong> — Roda = girar/zoom; Shift+roda = deslocar — isso é 50% do que você faz!</li>
-                    <li><strong>📏 Digite direto no teclado</strong> — Não confie no olho! Sempre digite o número + Enter — medida exata é tudo!</li>
-                    <li><strong>↩️ Ctrl+Z = Desfazer</strong> — Errou? Aperta isso que volta! Não tem problema errar!</li>
-                    <li><strong>🖱️ Botão direito do mouse</strong> — Sempre clique nele — é onde ficam 80% das opções que você precisa</li>
-                    <li><strong>🏬 Use o 3D Warehouse</strong> — Por que desenhar uma cadeira se alguém já fez? Baixe e use! Economiza horas!</li>
-                    <li><strong>🌑 Sombras só no final</strong> — Trabalha mais rápido sem sombra. Liga só quando for apresentar</li>
-                    <li><strong>📝 Um passo de cada vez</strong> — Planta primeiro → depois paredes → depois detalhes → depois telhado</li>
-                </ul>
-            </div>
-        </section>
-
-    </main>
-
-    <footer>
-        📘 <strong>Guia SketchUp Prático</strong> — Salve este arquivo no seu computador e consulte sempre que precisar!<br>
-        💡 "A melhor maneira de aprender é praticar um pouquinho todos os dias. Você consegue!" 🚀
-    </footer>
-</div>
+    `;
+}
+</script>
 
 </body>
 </html>
